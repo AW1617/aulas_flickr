@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		#content div { display: inline-block;}
+		#content div img {width:100px; border-radius: 20px;}
+
+	</style>
+	<title></title>
+	<script type="text/javascript" src ="jquery/jquery-3.1.1.js"></script>
+	<script>
+		$(document).ready(function () {
+			// botoes
+			$("#bgetphotos").click(function () {
+				//alert("ui");
+				//$("#content").prepend($("<p/>").html("ui"));
+				$.ajax({
+					url: "https://api.flickr.com/services/rest/",
+					data : {
+						"method" : "flickr.photos.getRecent",
+						// substitua pela sua propria API_KEY do flickr
+						"api_key" : "coloque_aqui_a_sua_api_key",
+						"extras" : "url_q",
+						"per_page" : 5,
+						"format":"json",
+						"nojsoncallback":1,
+					},
+					method : "GET",
+					dataType : "json",
+					success : function (dados) {
+						console.log(dados.photos.photo);
+
+						$(dados.photos.photo).each(function(idx,val) {
+							var newphoto = $("<div/>").append($("<img/>").attr("src",val.url_q));
+							$("#content").append(newphoto);
+						});
+					}
+				});
+			});
+
+			$("#bclearphotos").click(function() {
+				$("#content").empty();
+			})
+		});
+
+	</script>
+</head>
+
+<body>
+<div id="control">
+	<button id="bgetphotos"> Obter Fotos </button>
+	<button id="bclearphotos">Limpar Fotos</button>
+</div>
+
+<div id="content">
+
+<div>
+
+</body>
+
+</html>
